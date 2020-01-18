@@ -186,10 +186,12 @@ avoidance of system calls.
             In a Linux system, the I2C controller embedded in the processor is typically the master, controlling the bus.
             Each slave device is identified by a unique I2C address. Each transaction initiated by the master contains this address, which allows the relevant slave to recognize that it should reply to this particular transaction.
 ### Why is the probe method needed in Linux device drivers in addition to init? 
-            Different device types can have probe() functions. For example, PCI and USB devices both have probe() functions.
+            When a driver module is loaded into a running kernel, it requests resources and offers facilities.
+            The driver should probe for its device and its hardware location (I/O ports and IRQ line)—but without registering them.
+            eg. PCI and USB devices both have probe() functions.
             In PCI The driver's init function calls pci_register_driver() which gives the kernel a list of devices it is able to service, along with a pointer to the probe() function. 
             The kernel then calls the driver's probe() function once for each device.
             This probe function starts the per-device initialization:
                    initializing hardware, allocating resources, and registering the device with the kernel as a block or network device or whatever it is.
             That makes it easier for device drivers, because they never need to search for devices or worry about finding a device that was hot-plugged. 
-The kernel handles that part and notifies the right driver when it has a device for you to handle.
+            The kernel handles that part and notifies the right driver when it has a device for you to handle.
