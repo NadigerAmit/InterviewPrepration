@@ -170,8 +170,7 @@ avoidance of system calls.
        |             User space     |                   Kernel space                                                  |                                                
        App <- ->  C Library   <- -> |  System Call interface  <- ->  Framework  <- ->  Driver  <- ->  Device controller/Adapter <- -> Bus Infrastructure    <- ->  HW
 ###  What is sysfs 
-            The bus, device, drivers, etc. structures are internal to the kernel
-            The sysfs virtual filesystem offers a mechanism to export such information to user space
+             The sysfs virtual filesystem offers a mechanism to export such information to user space such as bus, device, drivers, etc. structures are internal to the kernel
             Used for example by udev to provide automatic module loading, firmware loading, mounting of external media, etc.
             sysfs is usually mounted in /sys
             /sys/bus/ contains the list of buses
