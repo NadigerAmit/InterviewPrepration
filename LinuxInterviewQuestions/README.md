@@ -82,7 +82,7 @@
                 /boot/config-<version> Kernel configuration for this version"
 ##### Step 14 . Reboot 
                   reboot
-
+# -------------------------------------------------------------------------------------------------------------------------------------
 ## Advanced 
 ### What it means when it is said "Linux is GNU General
 
