@@ -1,9 +1,9 @@
 # Linux Interview Questions 
 ## Explain the linux kernel compilation steps 
-            Step 1. Get the latest Linux kernel source code
+#### Step 1. Get the latest Linux kernel source code
             : wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.1.tar.xz
                  # Result  -> will get linux-5.4.1.tar.xz
-            Step 2. Extract tar.xz file
+##### Step 2. Extract tar.xz file
            : unxz -v linux-5.4.1.tar.xz
                 # Result  -> will get linux-5.4.1.tar
             Step 3. Verify Linux kernel tartball with pgp :
