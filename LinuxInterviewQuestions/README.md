@@ -7,7 +7,8 @@
            : unxz -v linux-5.4.1.tar.xz
                 # Result  -> will get linux-5.4.1.tar
             Step 3. Verify Linux kernel tartball with pgp :
-            3.1 : First grab the PGP signature for linux-5.4.1.tar:  wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.1.tar.sign
+            3.1 : First get  the PGP signature for linux-5.4.1.tar:  
+                  wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.1.tar.sign
             3.2 : Try to verify it:   gpg --verify linux-5.4.1.tar.sign
                 # Result : 
                     "amit@amit-OptiPlex-7050:~/Linuxkernel$ gpg --verify linux-5.4.1.tar.sign
@@ -16,7 +17,8 @@
                     gpg: Signature made 2019年11月29日 18時11分32秒 JST
                     gpg:                using RSA key 647F28654894E3BD457199BE38DBBDC86092693E
                     gpg: Can't check signature: No public key"
-            Step 4.  Get the public key from the PGP keyserver in order to verify the signature i.e. RSA key ID 647F28654894E3BD457199BE38DBBDC86092693E (from the above outputs):
+##### Step 4.  Get the public key from the PGP keyserver in order to verify the signature 
+             i.e. RSA key ID 647F28654894E3BD457199BE38DBBDC86092693E (from the above outputs):
               : gpg --recv-keys 647F28654894E3BD457199BE38DBBDC86092693E
                #  Result : 
                     amit@amit-OptiPlex-7050:~/Linuxkernel$ gpg --recv-keys 647F28654894E3BD457199BE38DBBDC86092693E
@@ -27,8 +29,8 @@
                     gpg: no ultimately trusted keys found
                     gpg: Total number processed: 1
                     gpg:               imported: 1"
-           Step 5. Now verify gpg key again with the gpg command: 
-                : gpg --verify linux-5.4.1.tar.sign
+##### Step 5. Now verify gpg key again with the gpg command: 
+             : gpg --verify linux-5.4.1.tar.sign
                 # Result : 
                     "amit@amit-OptiPlex-7050:~/Linuxkernel$ gpg --verify linux-5.4.1.tar.sign
                     gpg: assuming signed data in 'linux-5.4.1.tar'
@@ -40,30 +42,31 @@
                     gpg: WARNING: This key is not certified with a trusted signature!
                     gpg:          There is no indication that the signature belongs to the owner.
                     Primary key fingerprint: 647F 2865 4894 E3BD 4571  99BE 38DB BDC8 6092 693E"
-           Step 6. If you do not get “BAD signature” output from the “gpg –verify” command,
+##### Step 6. If you do not get “BAD signature” output from the “gpg –verify” command,
                 then untar/extract the Linux kernel tarball using the tar command, enter:
                     :  tar xvf linux-5.4.1.tar
-          Step 7. Configure the Linux kernel features and modules 
-                :  cd linux-5.4.1/
+##### Step 7. Configure the Linux kernel features and modules 
+            :  cd linux-5.4.1/
                 :cp -v /boot/config-$(uname -r) .config "
-          Step 8. Take a back up earlier config file :
+##### Step 8. Take a back up earlier config file :
                 '/boot/config-5.0.0-23-generic' -> '.config'"
-          Step 9 .  Install the required compilers and other tools
-                : $ sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev"
-          Step 10 . Configuring the kernel 
-                    $ make menuconfig – Text based color menus, radiolists & dialogs.
+##### Step 9 .  Install the required compilers and other tools
+             : $ sudo apt-get install build-essential libncurses-dev bison flex libssl-dev libelf-dev"
+##### Step 10 . Configuring the kernel 
+             $ make menuconfig – Text based color menus, radiolists & dialogs.
                         This option also useful on remote server if you wanna compile kernel remotely.
                     $ make xconfig – X windows (Qt) based configuration tool, works best under KDE desktop
                     $ make gconfig – X windows (Gtk) based configuration tool, works best under Gnome Dekstop."
-          Step 11.  Compile the Kernel : make   OR  make -j 4
+##### Step 11.  Compile the Kernel : 
+              make   OR  make -j 4
                 # Result Generates:
                       vmlinux, the raw uncompressed kernel image, in the ELF format, useful for debugging purposes, but cannot be booted
                       arch/<arch>/boot/*Image, the final, usually compressed, kernel image that can be booted
                       bzImage for x86, zImage for ARM, vmlinux.bin.gz for ARC, etc.
                       arch/<arch>/boot/dts/*.dtb, compiled Device Tree files (on some architectures)
                       All kernel modules, spread over the kernel source tree, as .ko (Kernel Object) files."
-          Step 12.  Install the Linux kernel modules
-                 $ sudo make modules_install
+##### Step 12.  Install the Linux kernel modules
+              $ sudo make modules_install
                 # Result 
                     "Does the installation for the host system by default
                     Installs all modules in /lib/modules/<version>/
@@ -71,13 +74,13 @@
                     modules.alias, modules.aliases.bin
                     Aliases for module loading utilities. Used to find drivers for devices. Example line:
                     alias usb:v066Bp20F9d*dc*dsc*dp*ic*isc*ip*in* asix"
-         Step 13. Install the Linux kernel
+##### Step 13. Install the Linux kernel
             : sudo make install 
                 /boot/vmlinuz-<version> Compressed kernel image. Same as the one in arch/<arch>/boot
                 /boot/System.map-<version> Stores kernel symbol addresses for debugging purposes 
                 (obsolete: such information is usually stored in the kernel itself)
                 /boot/config-<version> Kernel configuration for this version"
-        Step 14 . Reboot 
+##### Step 14 . Reboot 
                   reboot
 
 ## Advanced 
