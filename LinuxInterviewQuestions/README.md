@@ -114,7 +114,7 @@
               : 1st MB of kernel from same partition (/boot) loaded in RAM by bootlader in read mode, then switch to protected mode (32-bit) and move 1MB ahead clearing 1st MB
               : Then swith back to real mode and do same with initrd (if it's separate from kernel)
               : Kernel contain ramfs drivers to read rootfs from initrd and mount it
-   6.2 Initramfs:
+            6.2 Initramfs:
              - Contains minimal filesystem and modules (required drivers which aren't carried by kernel) to access real rootfs (hard driver, NFS etc.)
              - udev or specific scripts load required modules
              - <ramdisk>/init is usually a script which loads necessary drivers and mounts real rootfs
