@@ -120,10 +120,7 @@
              - <ramdisk>/init is usually a script which loads necessary drivers and mounts real rootfs
              - finally init switch_root's to real rootfs and executes <real rootfs>/sbin/init; sysV (traditional), upstart (Ubuntu's            initiative) or systemD (the latest widely accepted)
 
-#### 8. Active/boot partition (Boot sector)
-#### 9. Kernel
-#### 10. Initrd / initramfs (init)
-#### 11. Services/daemons/processes
+
 ### What it means when it is said "Linux is GNU General
 
             When you receive or buy a device with Linux on it, you should receive the Linux sources, with the right to study, modify and redistribute them.
