@@ -167,10 +167,29 @@ avoidance of system calls.
             Each module is stored as a separate file in the filesystem, and therefore access to a filesystem is mandatory to use modules
             This is not possible in the early boot procedure of the kernel, because no filesystem is available.
 ###  What is the flow of control from app to device in Linux 
-       |             User space            |                                                                        Kernel space                                                        |                                                
-       App <- ->  C Library   <- -> |  System Call interface  <- ->  Framework  <- ->  Driver  <- ->  Device controller
-                        /Adapter <- -> Bus Infrastructure    <- ->  HW
-         
+       |             User space     |                   Kernel space                                                  |                                                
+       App <- ->  C Library   <- -> |  System Call interface  <- ->  Framework  <- ->  Driver  <- ->  Device controller/Adapter <- -> Bus Infrastructure    <- ->  HW
+###  What is sysfs 
+            The bus, device, drivers, etc. structures are internal to the kernel
+            The sysfs virtual filesystem offers a mechanism to export such information to user space
+            Used for example by udev to provide automatic module loading, firmware loading, mounting of external media, etc.
+            sysfs is usually mounted in /sys
+            /sys/bus/ contains the list of buses
+            /sys/devices/ contains the list of devices
+            /sys/class enumerates devices by class (net, input, block...), whatever the bus they are connected to.
             
-            
-
+### What is I2C 
+            Inter-Integrated Circuit, known as I2C, is a two-wire data transfer bus:
+            A very commonly used low-speed bus to connect on-board and external devices to the processor.
+            Uses only two wires: SDA for the data, SCL for the clock.
+            It is a master/slave bus: only the master can initiate transactions, and slaves can only reply to transactions initiated by masters.
+            In a Linux system, the I2C controller embedded in the processor is typically the master, controlling the bus.
+            Each slave device is identified by a unique I2C address. Each transaction initiated by the master contains this address, which allows the relevant slave to recognize that it should reply to this particular transaction.
+### Why is the probe method needed in Linux device drivers in addition to init? 
+            Different device types can have probe() functions. For example, PCI and USB devices both have probe() functions.
+            In PCI The driver's init function calls pci_register_driver() which gives the kernel a list of devices it is able to service, along with a pointer to the probe() function. 
+            The kernel then calls the driver's probe() function once for each device.
+            This probe function starts the per-device initialization:
+                   initializing hardware, allocating resources, and registering the device with the kernel as a block or network device or whatever it is.
+            That makes it easier for device drivers, because they never need to search for devices or worry about finding a device that was hot-plugged. 
+The kernel handles that part and notifies the right driver when it has a device for you to handle.
