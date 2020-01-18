@@ -167,8 +167,8 @@ avoidance of system calls.
             Each module is stored as a separate file in the filesystem, and therefore access to a filesystem is mandatory to use modules
             This is not possible in the early boot procedure of the kernel, because no filesystem is available.
 ###  What is the flow of control from app to device in Linux 
-            |             User space            |                                                                        Kernel space                                                        |                                                
-                        App <- ->  C Library   <- -> |  System Call interface  <- ->  Framework  <- ->  Driver  <- ->  Device controller
+       |             User space            |                                                                        Kernel space                                                        |                                                
+       App <- ->  C Library   <- -> |  System Call interface  <- ->  Framework  <- ->  Driver  <- ->  Device controller
                         /Adapter <- -> Bus Infrastructure    <- ->  HW
          
             
