@@ -84,9 +84,49 @@
                   reboot
 # -------------------------------------------------------------------------------------------------------------------------------------
 ## Advanced 
+### What is boot loading steps in Linux 
+#### 1. Power Button Pressed : 
+            BIOS / UEFI is the first software code that is hard-coded on board and runs after we press power button. 
+            BIOS runs in real (16 bit) mode of processor, thus it can not address more than 2^20 bytes of RAM i.e. routines can't access more than 1 MiB of RAM, which is a strict limitation and a major inconvenience.
+#### 2. Power On Self Test (POST); 
+            identify the devices present and to report any problems
+#### 3. BIOS / UEFI
+#### 4. Necessary hardware initialization (keyboard, disk etc.)
+#### 5. Disk (MBR)
+     - 1st 512 bytes (1 sector) at the start of 1st valid disk
+     - Bootstrap code (446 bytes) + Partition Table (64 bytes)
+     - Executable code: Bootloader 1st stage scans partition table and finds 1st sector of active partition (or may point towards stage 1.5)
+     - Partition table provides inormation about active/bootable partition (and all others as well)
+     - Small size of 64 bytes limits the number of maximum (primary) partitions to 4
+     - Since bootloader unable to understand filesystem (inodes etc.) yet, so MBR is itself executable
+     - Last 2 bytes are boot signatures i.e. to find immediately if disk/drive is bootable or not and hence switch to the next
+#### 6. DOS Compatibility Region code (optional)
+#### 7. Bootloader
+     - Loaded by stage 2 (or possibly 1 or 1.5) from the filesystem of same partition
+     -Loads all necessary filesystem drivers
+     - Configuration is read from database e.g. /boot/grub/ on Linux (GRUB) 
+    6.1  Linux:
+              : GRUB makes use of modules to offer extra functionality for complex boot processes
+              : It can show a boot menu to user if needed or configured e.g. for multi-booting or in safe/recovery mode or boot from USB/Network etc.
+              : Locates and loads the kernel of desired OS and ramdisk in RAM
+              : 'os-prober' helps 'grub-install' and 'grub-update' finding Windows boot partition (System Reserved) by reading bootloader configuration in that partition
+              : Kernel
+              : 1st MB of kernel from same partition (/boot) loaded in RAM by bootlader in read mode, then switch to protected mode (32-bit) and move 1MB ahead clearing 1st MB
+              : Then swith back to real mode and do same with initrd (if it's separate from kernel)
+              : Kernel contain ramfs drivers to read rootfs from initrd and mount it
+   6.2 Initramfs:
+             - Contains minimal filesystem and modules (required drivers which aren't carried by kernel) to access real rootfs (hard driver, NFS etc.)
+             - udev or specific scripts load required modules
+             - <ramdisk>/init is usually a script which loads necessary drivers and mounts real rootfs
+             - finally init switch_root's to real rootfs and executes <real rootfs>/sbin/init; sysV (traditional), upstart (Ubuntu's            initiative) or systemD (the latest widely accepted)
+
+#### 8. Active/boot partition (Boot sector)
+#### 9. Kernel
+#### 10. Initrd / initramfs (init)
+#### 11. Services/daemons/processes
 ### What it means when it is said "Linux is GNU General
 
-    When you receive or buy a device with Linux on it, you should receive the Linux sources, with the right to study, modify and redistribute them.
+            When you receive or buy a device with Linux on it, you should receive the Linux sources, with the right to study, modify and redistribute them.
     When you produce Linux based devices, you must release the sources to the recipient, with the same rights, with no restriction.
 ### What is Kernel in Linux 
             The kernel image is a single file, resulting from the linking of all object files that correspond to features enabled in the configuration (.config during "make menuconfig")
