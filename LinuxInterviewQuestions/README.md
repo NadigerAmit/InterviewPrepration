@@ -113,4 +113,37 @@
        The struct bus_type  -->  which represent one type of bus (USB, PCI, I2C, etc.)
        The struct device_driver -->  which represents one driver capable of handling certain devices on a certain bus.
        The struct device -->  which represents one device connected to a bus
-### 5    
+### 5 What are peculiar features of Linux kernel
+     1. The Kernel cant use userspace lib or c library because of below reasons :
+     2. kernel code is portable ,  i.e All code outside arch/ should be portable 
+     3. Never use floating point numbers in kernel code. Your code may need to run on a low-end processor without a floating point unit. Using float in code  will prevent it from being portable 
+### What are kernel memory constraints 
+     1. No memory protection
+     2. The kernel doesn’t try to recover from attemps to access illegal memory locations. 
+            It just dumps oops messages on the system console.
+     3.  Fixed size stack (8 or 4 KB). Unlike in user space, no mechanism was implemented to make it grow
+     4.  Swapping is not implemented for kernel memory either.
+### User space drivers are possiable , if yes when this kind of driver is used  . If no what is restriction ?
+      it is possible to implement device drivers in user space!
+      Can be used in below situation :  
+      The kernel provides a mechanism that allows user space applications to directly access the hardware.
+      There is no need to leverage an existing kernel subsystem such as the networking stack or filesystems.
+      There is no need for the kernel to act as a “multiplexer” for the device: only one application accesses the device.
+
+            Certain classes of devices (printers, scanners, 2D/3D graphics acceleration) are typically handled partly in kernel space, partly in user space.
+            Ex: USB with libusb, SPI with spidev,,I2C with i2cdev,Memory-mapped devices with UIO, including interrupt handling, driver-api/uio-howto
+### What are the advantages and dis advantages of user space drivers 
+   #### Advantages
+            No need for kernel coding skills. Easier to reuse code between devices.
+            Drivers can be written in any language, even Perl!
+            Drivers can be kept proprietary.
+            Driver code can be killed and debugged. Cannot crash the kernel.
+            Can be swapped out (kernel code cannot be).
+            Can use floating-point computation.
+            Less in-kernel complexity.
+            Potentially higher performance, especially for memory-mapped devices, thanks to the
+avoidance of system calls.
+   #### Drawbacks
+            Less straightforward to handle interrupts.
+            Increased interrupt latency vs. kernel code."
+
