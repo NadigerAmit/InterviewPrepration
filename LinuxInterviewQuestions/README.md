@@ -84,11 +84,21 @@
                   reboot
 
 ## Advanced 
-### 1 What it means when it is said "Linux is GNU General
+### What it means when it is said "Linux is GNU General
 
     When you receive or buy a device with Linux on it, you should receive the Linux sources, with the right to study, modify and redistribute them.
     When you produce Linux based devices, you must release the sources to the recipient, with the same rights, with no restriction.
-### 2 Why C Library is not used in Linux kernel 
+### What is Kernel in Linux 
+            The kernel image is a single file, resulting from the linking of all object files that correspond to features enabled in the configuration (.config during "make menuconfig")
+            This is the file that gets loaded in memory by the bootloader
+            All included features are therefore available as soon as the kernel starts, at a time where no filesystem exists
+            
+            "It will install three files into /boot directory as well as modification to your kernel grub configuration file:
+            initramfs-5.4.1.img   -> the final, usually compressed, kernel image that can be booted
+System.map-5.4.
+            vmlinuz-5.4.1   -> the raw uncompressed kernel image, in the ELF format, useful for debugging purposes, but cannot be booted"
+
+### Why C Library is not used in Linux kernel 
 
      The kernel has to be standalone and can’t use user space code.
      #Architectural reason:
@@ -98,7 +108,7 @@
        Hence, kernel code has to supply its own library implementations (string utilities, cryptography, uncompression...)
        So, you can’t use standard C library functions in kernel code. (printf(), memset(), malloc(),...).
        Fortunately, the kernel provides similar C functions for your convenience, like printk(), memset(), kmalloc(), ...
-### 3 What are device controllers/adapter drivers in device model
+### What are device controllers/adapter drivers in device model
      The Device Controller works like an interface between a device and a device driver. 
      I/O units (Keyboard, mouse, printer, etc.) typically consist of a mechanical component and an electronic component where electronic component is called the device controller.
      There is always a device controller and a device driver for each device to communicate with the Operating Systems.
@@ -108,12 +118,17 @@
      The presence of the controller means that the OS programmer does not need to explicitly program the electrial field of the screen!
      The controller has registers (similar to CPU registers, but for the device) and the OS can write these registers to "give orders" to the device (e.g., "shut down" or "accept data") or read its state
      Ex; PCI devce controller i.e ddbinder 
-### 4 How device model is organized
+### Why we need device model in Linux kernel  for driver development 
+            The Linux kernel runs on a wide range of architectures and hardware platforms, and therefore needs to maximize the reusability of code between platforms.
+            Eg. For example, we want the same USB device driver to be usable on a x86 PC, or an ARM platform, even though the USB controllers used on these platforms are different.
+            --> Thus Device Model allows provides  a clean organization of the code, with the device drivers separated from the controller drivers, the hardware description separated from the drivers themselves, etc.
+
+### How device model is organized
      The device model is organized around three main data structures:
        The struct bus_type  -->  which represent one type of bus (USB, PCI, I2C, etc.)
        The struct device_driver -->  which represents one driver capable of handling certain devices on a certain bus.
        The struct device -->  which represents one device connected to a bus
-### 5 What are peculiar features of Linux kernel
+### What are peculiar features of Linux kernel
      1. The Kernel cant use userspace lib or c library because of below reasons :
      2. kernel code is portable ,  i.e All code outside arch/ should be portable 
      3. Never use floating point numbers in kernel code. Your code may need to run on a low-end processor without a floating point unit. Using float in code  will prevent it from being portable 
@@ -146,4 +161,16 @@ avoidance of system calls.
    #### Drawbacks
             Less straightforward to handle interrupts.
             Increased interrupt latency vs. kernel code."
+### What are modules and why kernel cant access them during boot time 
+            Some features (device drivers, filesystems, etc.) can however be compiled as modules
+            These are plugins that can be loaded/unloaded dynamically to add/remove features to the kernel
+            Each module is stored as a separate file in the filesystem, and therefore access to a filesystem is mandatory to use modules
+            This is not possible in the early boot procedure of the kernel, because no filesystem is available.
+###  What is the flow of control from app to device in Linux 
+            |             User space            |                                                                        Kernel space                                                        |                                                
+                        App <- ->  C Library   <- -> |  System Call interface  <- ->  Framework  <- ->  Driver  <- ->  Device controller
+                        /Adapter <- -> Bus Infrastructure    <- ->  HW
+         
+            
+            
 
